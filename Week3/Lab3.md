@@ -14,7 +14,11 @@ UNION
 SELECT course_id
 FROM section
 WHERE semester = 'Spring' AND year = 2010;
-UNION ALL — To retain duplicates
+```
+
+### UNION ALL — To retain duplicates
+
+```sql
 SELECT course_id
 FROM section
 WHERE semester = 'Fall' AND year = 2009
@@ -24,7 +28,13 @@ UNION ALL
 SELECT course_id
 FROM section
 WHERE semester = 'Spring' AND year = 2010;
-2. Courses that ran in Fall 2009 and Spring 2010 — INTERSECT
+```
+
+---
+
+### 2. Courses that ran in Fall 2009 and Spring 2010 — INTERSECT
+
+```sql
 SELECT course_id
 FROM section
 WHERE semester = 'Fall' AND year = 2009
@@ -34,7 +44,13 @@ INTERSECT
 SELECT course_id
 FROM section
 WHERE semester = 'Spring' AND year = 2010;
-3. Courses that ran in Fall 2009 but not in Spring 2010 — MINUS
+```
+
+---
+
+### 3. Courses that ran in Fall 2009 but not in Spring 2010 — MINUS
+
+```sql
 SELECT course_id
 FROM section
 WHERE semester = 'Fall' AND year = 2009
@@ -44,15 +60,26 @@ MINUS
 SELECT course_id
 FROM section
 WHERE semester = 'Spring' AND year = 2010;
-Subqueries
-4. Course names for which no student registered
+```
+
+---
+
+## Subqueries
+
+### 4. Course names for which no student registered
+
+```sql
 SELECT title
 FROM course
 WHERE course_id NOT IN (
     SELECT course_id
     FROM takes
 );
-Safer version using NOT EXISTS
+```
+
+### Safer version using NOT EXISTS
+
+```sql
 SELECT title
 FROM course c
 WHERE NOT EXISTS (
@@ -60,7 +87,13 @@ WHERE NOT EXISTS (
     FROM takes t
     WHERE t.course_id = c.course_id
 );
-5. Courses offered in both Fall 2009 and Spring 2010 — IN
+```
+
+---
+
+### 5. Courses offered in both Fall 2009 and Spring 2010 — IN
+
+```sql
 SELECT course_id
 FROM section
 WHERE semester = 'Fall'
@@ -71,7 +104,13 @@ WHERE semester = 'Fall'
       WHERE semester = 'Spring'
         AND year = 2010
   );
-6. Total number of students who have taken courses taught by instructor 10101
+```
+
+---
+
+### 6. Total number of students who have taken courses taught by instructor 10101
+
+```sql
 SELECT COUNT(DISTINCT t.ID) AS total_students
 FROM takes t
 JOIN teaches te
@@ -80,7 +119,13 @@ JOIN teaches te
  AND t.semester = te.semester
  AND t.year = te.year
 WHERE te.ID = '10101';
-7. Courses offered in Fall 2009 but not in Spring 2010 — NOT IN
+```
+
+---
+
+### 7. Courses offered in Fall 2009 but not in Spring 2010 — NOT IN
+
+```sql
 SELECT course_id
 FROM section
 WHERE semester = 'Fall'
@@ -91,15 +136,28 @@ WHERE semester = 'Fall'
       WHERE semester = 'Spring'
         AND year = 2010
   );
-8. Students whose name is the same as an instructor's name
+```
+
+---
+
+### 8. Students whose name is the same as an instructor's name
+
+```sql
 SELECT name
 FROM student
 WHERE name IN (
     SELECT name
     FROM instructor
 );
-Set Comparison — SOME / ALL
-9. Instructors whose salary is greater than some Biology instructor
+```
+
+---
+
+## Set Comparison — SOME / ALL
+
+### 9. Instructors whose salary is greater than some Biology instructor
+
+```sql
 SELECT name
 FROM instructor
 WHERE salary > SOME (
@@ -107,7 +165,13 @@ WHERE salary > SOME (
     FROM instructor
     WHERE dept_name = 'Biology'
 );
-10. Instructors whose salary is greater than all Biology instructors
+```
+
+---
+
+### 10. Instructors whose salary is greater than all Biology instructors
+
+```sql
 SELECT name
 FROM instructor
 WHERE salary > ALL (
@@ -115,7 +179,13 @@ WHERE salary > ALL (
     FROM instructor
     WHERE dept_name = 'Biology'
 );
-11. Departments having the highest average salary
+```
+
+---
+
+### 11. Departments having the highest average salary
+
+```sql
 SELECT dept_name
 FROM instructor
 GROUP BY dept_name
@@ -124,15 +194,28 @@ HAVING AVG(salary) >= ALL (
     FROM instructor
     GROUP BY dept_name
 );
-12. Departments whose budget is less than the average salary of all instructors
+```
+
+---
+
+### 12. Departments whose budget is less than the average salary of all instructors
+
+```sql
 SELECT dept_name
 FROM department
 WHERE budget < (
     SELECT AVG(salary)
     FROM instructor
 );
-Test for Empty Relations — EXISTS / NOT EXISTS
-13. Courses taught in both Fall 2009 and Spring 2010 — EXISTS
+```
+
+---
+
+## Test for Empty Relations — EXISTS / NOT EXISTS
+
+### 13. Courses taught in both Fall 2009 and Spring 2010 — EXISTS
+
+```sql
 SELECT DISTINCT s1.course_id
 FROM section s1
 WHERE s1.semester = 'Fall'
@@ -144,7 +227,13 @@ WHERE s1.semester = 'Fall'
         AND s2.semester = 'Spring'
         AND s2.year = 2010
   );
-14. Students who have taken all courses offered by Biology
+```
+
+---
+
+### 14. Students who have taken all courses offered by Biology
+
+```sql
 SELECT s.ID, s.name
 FROM student s
 WHERE NOT EXISTS (
@@ -158,17 +247,29 @@ WHERE NOT EXISTS (
             AND t.course_id = c.course_id
       )
 );
-Test for Absence of Duplicate Tuples
-15. Courses offered at most once in 2009
+```
+
+---
+
+## Test for Absence of Duplicate Tuples
+
+### 15. Courses offered at most once in 2009
+
+```sql
 SELECT course_id
 FROM section
 WHERE year = 2009
 GROUP BY course_id
 HAVING COUNT(*) <= 1;
-16. Students who have taken at least two courses offered by the CSE department
+```
 
-In the supplied database, the department name is Comp. Sci..
+---
 
+### 16. Students who have taken at least two courses offered by the CSE department
+
+> In the supplied database, the department name is `Comp. Sci.`.
+
+```sql
 SELECT s.ID, s.name
 FROM student s
 WHERE (
@@ -179,8 +280,15 @@ WHERE (
     WHERE t.ID = s.ID
       AND c.dept_name = 'Comp. Sci.'
 ) >= 2;
-Subqueries in the FROM Clause
-17. Average instructor salary for departments whose average salary is greater than 42000
+```
+
+---
+
+## Subqueries in the FROM Clause
+
+### 17. Average instructor salary for departments whose average salary is greater than 42000
+
+```sql
 SELECT dept_name, avg_salary
 FROM (
     SELECT dept_name, AVG(salary) AS avg_salary
@@ -188,8 +296,15 @@ FROM (
     GROUP BY dept_name
 )
 WHERE avg_salary > 42000;
-Views
-18. Create all_courses view for Physics courses offered in Fall 2009
+```
+
+---
+
+## Views
+
+### 18. Create all_courses view for Physics courses offered in Fall 2009
+
+```sql
 CREATE VIEW all_courses AS
 SELECT c.course_id,
        c.title,
@@ -204,15 +319,32 @@ JOIN course c
 WHERE c.dept_name = 'Physics'
   AND s.semester = 'Fall'
   AND s.year = 2009;
-19. Select all courses from all_courses
+```
+
+---
+
+### 19. Select all courses from all_courses
+
+```sql
 SELECT *
 FROM all_courses;
-20. Create department_total_salary view
+```
+
+---
+
+### 20. Create department_total_salary view
+
+```sql
 CREATE VIEW department_total_salary AS
 SELECT dept_name,
        SUM(salary) AS total_salary
 FROM instructor
 GROUP BY dept_name;
-Display the contents of the view
+```
+
+### Display the contents of the view
+
+```sql
 SELECT *
 FROM department_total_salary;
+```
