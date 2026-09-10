@@ -1,14 +1,21 @@
-Lab7
-Advait Saxena
-25109580220
+# Lab 7 — PL/SQL
 
+## Name: Advait Saxena
+## Roll No: 25109580220
 
-1. Write a PL/SQL block to display the GPA of given student. 
+## 1. Write a PL/SQL block to display the GPA of given student.
 
-create table Studenttable(RollNo number;GPA decimal(2,1));
+```sql
+CREATE TABLE StudentTable (
+    RollNo NUMBER,
+    GPA DECIMAL(2,1)
+);
 
-INSERT INTO StudentTable (RollNo, GPA)
-VALUES(1, 5.8),(2, 6.5),(3, 3.4),(4, 7.8),(5, 9.5);
+INSERT INTO StudentTable (RollNo, GPA) VALUES (1, 5.8);
+INSERT INTO StudentTable (RollNo, GPA) VALUES (2, 6.5);
+INSERT INTO StudentTable (RollNo, GPA) VALUES (3, 3.4);
+INSERT INTO StudentTable (RollNo, GPA) VALUES (4, 7.8);
+INSERT INTO StudentTable (RollNo, GPA) VALUES (5, 9.5);
 
 DECLARE
     v_rollno StudentTable.RollNo%TYPE := &RollNo;
@@ -24,11 +31,13 @@ BEGIN
     END IF;
 END;
 /
+```
 
-2. Write a PL/SQL block to display the letter grade(0-4: F; 4-5: E; 5-6: D; 6-7: C;
-7-8: B; 8-9: A; 9-10: A+} of given student. 
+## 2. Write a PL/SQL block to display the letter grade of given student.
 
+Grade Criteria: 0-4: F; 4-5: E; 5-6: D; 6-7: C; 7-8: B; 8-9: A; 9-10: A+
 
+```sql
 DECLARE
     v_rollno StudentTable.RollNo%TYPE := &RollNo;
     v_gpa    StudentTable.GPA%TYPE;
@@ -60,17 +69,18 @@ BEGIN
     DBMS_OUTPUT.PUT_LINE('Grade: ' || v_grade);
 END;
 /
+```
 
-3.Input the date of issue and date of return for a book. Calculate and display the fine
-with the appropriate message using a PL/SQL block. The fine is charged as per
-the table 8.1:
-Late period Fine
-7 days NIL
-8 – 15 days Rs.1/day
-16 - 30 days Rs. 2/ day
-After 30 days Rs. 5.00
+## 3. Input the date of issue and date of return for a book. Calculate and display the fine with the appropriate message.
 
+Late Period | Fine
+--- | ---
+7 days | NIL
+8-15 days | Rs. 1/day
+16-30 days | Rs. 2/day
+After 30 days | Rs. 5/day
 
+```sql
 DECLARE
     v_issue_date  DATE := TO_DATE('&IssueDate', 'DD-MM-YYYY');
     v_return_date DATE := TO_DATE('&ReturnDate', 'DD-MM-YYYY');
@@ -82,24 +92,26 @@ BEGIN
     IF v_days <= 7 THEN
         v_fine := 0;
         DBMS_OUTPUT.PUT_LINE('No fine');
-        
+
     ELSIF v_days <= 15 THEN
         v_fine := (v_days - 7) * 1;
         DBMS_OUTPUT.PUT_LINE('Fine = Rs.' || v_fine);
-        
+
     ELSIF v_days <= 30 THEN
         v_fine := (8 * 1) + (v_days - 15) * 2;
         DBMS_OUTPUT.PUT_LINE('Fine = Rs.' || v_fine);
-        
+
     ELSE
         v_fine := (8 * 1) + (15 * 2) + (v_days - 30) * 5;
         DBMS_OUTPUT.PUT_LINE('Fine = Rs.' || v_fine);
     END IF;
 END;
 /
+```
 
-4. Write a PL/SQL block to print the letter grade of all the students(RollNo: 1 - 5).
+## 4. Write a PL/SQL block to print the letter grade of all the students (RollNo: 1 - 5).
 
+```sql
 DECLARE
     v_rollno NUMBER := 1;
     v_gpa    NUMBER;
@@ -139,10 +151,11 @@ BEGIN
     END LOOP;
 END;
 /
+```
 
-5. Alter StudentTable by appending an additional column LetterGrade Varchar2(2).
-Then write a PL/SQL block to update the table with letter grade of each student. 
+## 5. Alter StudentTable by appending an additional column LetterGrade VARCHAR2(2). Then write a PL/SQL block to update the table with letter grade of each student.
 
+```sql
 ALTER TABLE StudentTable
 ADD LetterGrade VARCHAR2(2);
 
@@ -184,10 +197,11 @@ BEGIN
     COMMIT;
 END;
 /
+```
 
-6. Write a PL/SQL block to find the student with max. GPA without using aggregate
-function. 
+## 6. Write a PL/SQL block to find the student with max. GPA without using aggregate function.
 
+```sql
 DECLARE
     v_max_gpa  NUMBER := 0;
     v_max_roll NUMBER := 0;
@@ -215,9 +229,11 @@ BEGIN
     DBMS_OUTPUT.PUT_LINE('GPA = ' || v_max_gpa);
 END;
 /
+```
 
-7. Implement lab exercise 4 using GOTO. 
+## 7. Implement lab exercise 4 using GOTO.
 
+```sql
 DECLARE
     v_rollno NUMBER := 1;
     v_gpa    NUMBER;
@@ -266,13 +282,14 @@ BEGIN
 
 END;
 /
+```
 
-8. Based on the University database schema, write a PL/SQL block to display the
-details of the Instructor whose name is supplied by the user. Use exceptions to
-show appropriate error message for the following cases:
-a. Multiple instructors with the same name
-b. No instructor for the given name 
+## 8. Based on the University database schema, write a PL/SQL block to display the details of the Instructor whose name is supplied by the user. Use exceptions to show appropriate error message for the following cases.
 
+a. Multiple instructors with the same name  
+b. No instructor for the given name
+
+```sql
 SET SERVEROUTPUT ON;
 
 DECLARE
@@ -303,5 +320,4 @@ EXCEPTION
         );
 END;
 /
-
-
+```
