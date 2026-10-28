@@ -1,7 +1,6 @@
 # Lab 7 — PL/SQL
 
 ## Name: Advait Saxena
-## Roll No: 25109580220
 
 ## 1. Write a PL/SQL block to display the GPA of given student.
 
